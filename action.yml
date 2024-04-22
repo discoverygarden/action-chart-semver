@@ -1,0 +1,29 @@
+name: 'Update chart version'
+description: 'Bump chart version based on updated image tag'
+inputs:
+  new_tag:
+    description: 'The new image tag'
+    required: true
+  old_tag:
+    description: 'The old image tag'
+    required: true
+  chart_version:
+    description: 'The current chart version'
+    required: true
+outputs:
+  old_tag:
+    description: 'Starting image tag'
+  new_tag:
+    description: 'Updated image tag'
+  diff:
+    description: 'Semver Difference between old and new tags'
+  chart_version:
+    description: 'Starting chart version'
+  new_chart_version:
+    description: 'The new chart version'
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
+branding:
+  icon: 'tag'
+  color: 'purple'

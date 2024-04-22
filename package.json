@@ -1,0 +1,20 @@
+{
+  "name": "action-chart-semver",
+  "version": "1.0.0",
+  "description": "action to increment chart version based on semver version change in dependency",
+  "main": "index.js",
+  "scripts": {
+    "package": "ncc build index.js -o dist"
+  },
+  "keywords": [],
+  "author": "discoverygarden",
+  "license": "ISC",
+  "dependencies": {
+    "@actions/core": "^1.10.1",
+    "@actions/github": "^6.0.0",
+    "semver": "^7.6.0"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.38.1"
+  }
+}
