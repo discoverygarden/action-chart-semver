@@ -35,9 +35,9 @@ function createNewChartVersion(chartVersion, diff) {
 
 async function run() {
     try {
-        const newTag = core.getInput('new-tag')  || '1.1.0';  ;
-        const oldTag = core.getInput('old-tag') || '1.0.0';
-        const chartVersion = core.getInput('chart-version') || '2.0.0';
+        const newTag = core.getInput('new-tag');
+        const oldTag = core.getInput('old-tag');
+        const chartVersion = core.getInput('chart-version');
         const diff = getAppDiff(newTag, oldTag);
         const newChartVersion = createNewChartVersion(chartVersion, diff);
         core.setOutput('old_tag', oldTag);
