@@ -11,14 +11,8 @@ inputs:
     description: 'The current chart version'
     required: true
 outputs:
-  old_tag:
-    description: 'Starting image tag'
-  new_tag:
-    description: 'Updated image tag'
   diff:
     description: 'Semver Difference between old and new tags'
-  chart_version:
-    description: 'Starting chart version'
   new_chart_version:
     description: 'The new chart version'
 runs:
