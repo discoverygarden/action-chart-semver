@@ -4,6 +4,10 @@ const semver = require('semver');
 
 function getAppDiff(newTag, oldTag) {
 // get semVer diff between new and old tag
+    if (!semver.valid(newTag) && !semver.valid(oldTag)) {
+        core.setFailed('Invalid tag format detected');
+        return;
+    }
     const diff = semver.diff(newTag, oldTag);
     return diff;
 }
@@ -38,8 +42,12 @@ async function run() {
         const newTag = core.getInput('new_tag');
         const oldTag = core.getInput('old_tag');
         const chartVersion = core.getInput('chart_version');
+        core.debug(`New tag: ${newTag}`);
+        core.debug(`Old tag: ${oldTag}`);
+        core.debug(`Chart version: ${chartVersion}`);
         const diff = getAppDiff(newTag, oldTag);
         core.setOutput('diff', diff);
+        core.debug(`Diff: ${diff}`);
         const newChartVersion = createNewChartVersion(chartVersion, diff);
         core.setOutput('new_chart_version', newChartVersion);
 
