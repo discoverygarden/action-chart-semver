@@ -34363,6 +34363,10 @@ const semver = __nccwpck_require__(1383);
 
 function getAppDiff(newTag, oldTag) {
 // get semVer diff between new and old tag
+    if (!semver.valid(newTag) && !semver.valid(oldTag)) {
+        core.setFailed('Invalid tag format detected');
+        return;
+    }
     const diff = semver.diff(newTag, oldTag);
     return diff;
 }
@@ -34394,15 +34398,16 @@ function createNewChartVersion(chartVersion, diff) {
 
 async function run() {
     try {
-        const newTag = core.getInput('new-tag')  || '1.1.0';  ;
-        const oldTag = core.getInput('old-tag') || '1.0.0';
-        const chartVersion = core.getInput('chart-version') || '2.0.0';
+        const newTag = core.getInput('new_tag');
+        const oldTag = core.getInput('old_tag');
+        const chartVersion = core.getInput('chart_version');
+        core.debug(`New tag: ${newTag}`);
+        core.debug(`Old tag: ${oldTag}`);
+        core.debug(`Chart version: ${chartVersion}`);
         const diff = getAppDiff(newTag, oldTag);
-        const newChartVersion = createNewChartVersion(chartVersion, diff);
-        core.setOutput('old_tag', oldTag);
-        core.setOutput('new_tag', newTag);
         core.setOutput('diff', diff);
-        core.setOutput('chart_version', chartVersion);
+        core.debug(`Diff: ${diff}`);
+        const newChartVersion = createNewChartVersion(chartVersion, diff);
         core.setOutput('new_chart_version', newChartVersion);
 
     } catch (error) {
