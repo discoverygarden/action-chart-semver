@@ -4,11 +4,11 @@ const semver = require('semver');
 
 function getAppDiff(newTag, oldTag) {
 // get semVer diff between new and old tag
-    if (!semver.valid(newTag) && !semver.valid(oldTag)) {
+    if (!semver.valid(semver.coerce(newTag)) && !semver.valid(semver.coerce(oldTag))) {
         core.setFailed('Invalid tag format detected');
         return;
     }
-    const diff = semver.diff(newTag, oldTag);
+    const diff = semver.diff(semver.coerce(newTag), semver.coerce(oldTag));
     return diff;
 }
 
@@ -34,8 +34,6 @@ function createNewChartVersion(chartVersion, diff) {
         return;
     }
 }
-
-
 
 async function run() {
     try {
