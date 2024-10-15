@@ -34363,11 +34363,11 @@ const semver = __nccwpck_require__(1383);
 
 function getAppDiff(newTag, oldTag) {
 // get semVer diff between new and old tag
-    if (!semver.valid(newTag) && !semver.valid(oldTag)) {
+    if (!semver.valid(semver.coerce(newTag)) && !semver.valid(semver.coerce(oldTag))) {
         core.setFailed('Invalid tag format detected');
         return;
     }
-    const diff = semver.diff(newTag, oldTag);
+    const diff = semver.diff(semver.coerce(newTag), semver.coerce(oldTag));
     return diff;
 }
 
@@ -34394,8 +34394,6 @@ function createNewChartVersion(chartVersion, diff) {
     }
 }
 
-
-
 async function run() {
     try {
         const newTag = core.getInput('new_tag');
@@ -34416,6 +34414,7 @@ async function run() {
 }
 
 run();
+
 })();
 
 module.exports = __webpack_exports__;
