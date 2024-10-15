@@ -1,0 +1,23 @@
+---
+name: Check Dist
+on:
+  pull_request:
+    branches: ['*']
+  push:
+    branches: ['main']
+jobs:
+  check-dist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run package
+      - run: |
+          if [[ $(git status --porcelain) ]]; then
+            echo "::debug:: $(git status --porcelain)"
+            echo '::error::`dist` changed, please update dist by running `npm run package`'
+            exit 1
+          fi
