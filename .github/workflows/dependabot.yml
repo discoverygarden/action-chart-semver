@@ -1,7 +1,15 @@
 ---
-name: Dependabot Pull-Request Ticket
-on: pull_request
-
+name: Bot Pull-Request Ticket
+on: 
+  pull_request:
+    types: [opened]
+permissions:
+  pull-requests: write
+  repository-projects: read
+  checks: read
+  contents: read
+  actions: read
+  
 jobs:
   dependabot:
     runs-on: ubuntu-latest
