@@ -4,7 +4,8 @@
   "description": "action to increment chart version based on semver version change in dependency",
   "main": "index.js",
   "scripts": {
-    "package": "ncc build index.js -o dist"
+    "package": "ncc build index.js -o dist",
+    "test": "jest"
   },
   "keywords": [],
   "author": "discoverygarden",
@@ -15,6 +16,11 @@
     "semver": "^7.6.0"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.38.1"
+    "@babel/core": "^7.26.9",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-react": "^7.26.3",
+    "@vercel/ncc": "^0.38.1",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0"
   }
 }
