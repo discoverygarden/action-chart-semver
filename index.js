@@ -1,18 +1,19 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
-const semver = require('semver');
+import * as core from '@actions/core';
+import semver from 'semver';
 
-function getAppDiff(newTag, oldTag) {
+export function getAppDiff(newTag, oldTag) {
 // get semVer diff between new and old tag
-    if (!semver.valid(semver.coerce(newTag)) && !semver.valid(semver.coerce(oldTag))) {
+    const coercedNewTag = semver.coerce(newTag);
+    const coercedOldTag = semver.coerce(oldTag);
+    if (!semver.valid(coercedNewTag) || !semver.valid(coercedOldTag)) {
         core.setFailed('Invalid tag format detected');
         return;
     }
-    const diff = semver.diff(semver.coerce(newTag), semver.coerce(oldTag));
+    const diff = semver.diff(coercedNewTag, coercedOldTag);
     return diff;
 }
 
-function createNewChartVersion(chartVersion, diff) {
+export function createNewChartVersion(chartVersion, diff) {
     // if diff is null, exit
     if (!diff) {
         core.setFailed('No new version detected');
@@ -26,13 +27,15 @@ function createNewChartVersion(chartVersion, diff) {
     // else create chart version
     // if diff is minor, increment minor version of chart
     if (diff === 'minor') {
-        return chartVersion = semver.inc(chartVersion, 'minor');
+        chartVersion = semver.inc(chartVersion, 'minor');
+
     } else if (diff === 'patch') {
-        return chartVersion = semver.inc(chartVersion, 'patch');
+        chartVersion = semver.inc(chartVersion, 'patch');
     } else {
         core.setFailed('Unknown version detected');
         return;
     }
+    return chartVersion;
 }
 
 async function run() {
@@ -44,13 +47,19 @@ async function run() {
         core.debug(`Old tag: ${oldTag}`);
         core.debug(`Chart version: ${chartVersion}`);
         const diff = getAppDiff(newTag, oldTag);
-        core.setOutput('diff', diff);
-        core.debug(`Diff: ${diff}`);
-        const newChartVersion = createNewChartVersion(chartVersion, diff);
-        core.setOutput('new_chart_version', newChartVersion);
-
+        if (diff) {
+            core.setOutput('diff', diff);
+            core.debug(`Diff: ${diff}`);
+        }
+const newChartVersion = createNewChartVersion(chartVersion, diff);
+if (newChartVersion) {
+    core.setOutput('new_chart_version', newChartVersion);
+} else {
+    core.setFailed('Failed to create new chart version');
+}
     } catch (error) {
         core.setFailed(error.message);
+        core.debug(`Error: ${error.message}`);
     }
 }
 
